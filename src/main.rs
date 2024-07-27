@@ -14,7 +14,7 @@ type SharedState = Arc<Mutex<HashMap<Uuid, oneshot::Sender<()>>>>;
 #[tokio::main]
 async fn main() {
     // setup our path endpoint requiring a uuid
-    let endpoint_path = warp::path!("wait-for-second-party" / Uuid);
+    let endpoint_path = warp::path("wait-for-second-party").and(warp::path::param::<Uuid>());
 
     // this will keep track of the requests
     let keep_track_of_state = Arc::new(Mutex::new(HashMap::new()));
@@ -25,7 +25,7 @@ async fn main() {
     // i want this endpoint to be able to handle both post and get requests
     let endpoint = endpoint_path
         .and(warp::post())
-        .and(warp::get())
+        //.and(warp::get())
         .and(state_filter)
         .and_then(request_handler);
 
