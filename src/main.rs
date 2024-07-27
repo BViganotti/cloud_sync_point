@@ -23,14 +23,20 @@ async fn main() {
     let state_filter = warp::any().map(move || Arc::clone(&keep_track_of_state));
 
     // i want this endpoint to be able to handle both post and get requests
-    let endpoint = endpoint_path
+    let post_endpoint = endpoint_path
         .and(warp::post())
-        //.and(warp::get())
-        .and(state_filter)
+        .and(state_filter.clone())
         .and_then(request_handler);
 
+    let get_endpoint = endpoint_path
+        .and(warp::get())
+        .and(state_filter.clone())
+        .and_then(request_handler);
+
+    let endpoints = post_endpoint.or(get_endpoint);
+
     println!("Cloud sync-point running at: 127.0.0.1:3030");
-    warp::serve(endpoint).run(([127, 0, 0, 1], 3030)).await;
+    warp::serve(endpoints).run(([127, 0, 0, 1], 3030)).await;
 }
 
 async fn request_handler(
