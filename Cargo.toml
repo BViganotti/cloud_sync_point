@@ -1,0 +1,11 @@
+[package]
+name = "cloud_sync_point"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.39.2", features = ["full"] }
+#had to add tokio-macros manually
+tokio-macros = "2.4.0"
+warp = "0.3.7"
+uuid = "1.10.0"
