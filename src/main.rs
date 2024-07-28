@@ -34,7 +34,6 @@ async fn main() {
 
     // i want this endpoint to be able to handle both post and get requests
     let endpoints = post_endpoint.or(get_endpoint);
-
     println!("cloud sync-point running at: 127.0.0.1:3030/wait-for-second-party/");
     warp::serve(endpoints).run(([127, 0, 0, 1], 3030)).await;
 }
@@ -44,9 +43,7 @@ async fn request_handler(
     req_state: SharedState,
 ) -> Result<impl warp::Reply, warp::Rejection> {
     let (tx, rx) = oneshot::channel();
-
     println!("request id: {}", unique_id);
-
     {
         // make state map data safe to access
         let mut req_state_guard = req_state.lock().unwrap();
@@ -55,7 +52,6 @@ async fn request_handler(
         if let Some(sender) = req_state_guard.remove(&unique_id) {
             // we have our second party, let's unblock and reply OK
             sender.send(()).ok();
-            //println!("The second party requested the URI");
             return Ok(warp::reply::with_status(
                 "the second party requested the URI",
                 warp::http::StatusCode::OK,
