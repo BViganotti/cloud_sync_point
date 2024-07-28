@@ -35,7 +35,7 @@ async fn main() {
     // i want this endpoint to be able to handle both post and get requests
     let endpoints = post_endpoint.or(get_endpoint);
 
-    println!("cloud sync-point running at: 127.0.0.1:3030");
+    println!("cloud sync-point running at: 127.0.0.1:3030/wait-for-second-party/");
     warp::serve(endpoints).run(([127, 0, 0, 1], 3030)).await;
 }
 
