@@ -35,7 +35,7 @@ Second terminal:
 ```sh
 curl -X POST http://127.0.0.1:3030/wait-for-second-party/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 ```
-You should see output in the terminal running the cloud sync-point liek that:
+You should see output in the terminal running the cloud sync-point like that:
 ```sh
 cloud sync-point running at: 127.0.0.1:3030
 
