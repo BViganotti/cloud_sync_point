@@ -22,7 +22,6 @@ async fn main() {
     // this filter will match any route, we need this because the unique id will be unique
     let state_filter = warp::any().map(move || Arc::clone(&keep_track_of_state));
 
-    // i want this endpoint to be able to handle both post and get requests
     let post_endpoint = endpoint_path
         .and(warp::post())
         .and(state_filter.clone())
@@ -33,6 +32,7 @@ async fn main() {
         .and(state_filter.clone())
         .and_then(request_handler);
 
+    // i want this endpoint to be able to handle both post and get requests
     let endpoints = post_endpoint.or(get_endpoint);
 
     println!("cloud sync-point running at: 127.0.0.1:3030");

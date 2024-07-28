@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func makePostRequest(url string, data []byte) {
+func make_post_req(url string, data []byte) {
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
 	if err != nil {
 		fmt.Println("error making request:", err)
@@ -33,12 +33,12 @@ func main() {
 	go func() {
 		fmt.Println("firing second POST request in 5s")
 		time.Sleep(5 * time.Second)
-		makePostRequest(url, data)
+		make_post_req(url, data)
 	}()
 
 	// firing the first POST request to the URI
 	fmt.Println("sending first POST request")
-	makePostRequest(url, data)
+	make_post_req(url, data)
 
 	// wait to ensure the second request completes before the script exits
 	time.Sleep(6 * time.Second)
