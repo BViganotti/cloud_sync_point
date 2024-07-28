@@ -45,6 +45,8 @@ async fn request_handler(
 ) -> Result<impl warp::Reply, warp::Rejection> {
     let (tx, rx) = oneshot::channel();
 
+    println!("request id: {}", unique_id);
+
     {
         // make state map data safe to access
         let mut req_state_guard = req_state.lock().unwrap();
@@ -68,12 +70,12 @@ async fn request_handler(
 
     tokio::select! {
         _ = rx => {
-            println!("the second party requested the URI");
+            println!("the second party requested the URI\n");
             Ok(warp::reply::with_status("the second party requested the URI", warp::http::StatusCode::OK))},
         // if this complete, it means that the second party didn't request the uri in time
         _ = tokio::time::sleep(Duration::from_secs(10)) => {
             // locking the map before removing the state
-            println!("the second party did not request the URI, reponding with TIMEOUT");
+            println!("the second party did not request the URI, reponding with TIMEOUT\n");
             let mut req_state_guard = req_state.lock().unwrap();
             req_state_guard.remove(&unique_id);
             Ok(warp::reply::with_status("TIMEOUT", warp::http::StatusCode::REQUEST_TIMEOUT))
